@@ -5,7 +5,7 @@ import {
     TouchableOpacity
 } from 'react-native'
 import {
-    ScaledSheet, moderateScale
+    ScaledSheet, moderateScale, scale
 } from 'react-native-size-matters'
 import {
     Block, BackNavBar
@@ -94,7 +94,9 @@ class NewList extends Component {
     
     return (
       <Block >
-        <BackNavBar />
+        <BackNavBar title="New List" 
+          titleViewStyle={{marginLeft: scale(-60), marginBottom: moderateScale(5)}}
+        />
 
         <KeyboardAwareScrollView  style={formView}>
           <TouchableOpacity onPress={this.onGetImg} style={{marginBottom: moderateScale(20)}}>

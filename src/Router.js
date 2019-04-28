@@ -5,6 +5,7 @@ import Welcome from './views/Welcome';
 import InventoryList from './views/InventoryList';
 import NewList from './views/NewList';
 import AddInventory from './views/AddInventory'
+import Signup from './views/Signup'
 
 import {
   ScaledSheet,
@@ -33,7 +34,8 @@ class RouterComponent extends Component {
         <Scene key="welcome" initial component={Welcome} hideNavBar />
         <Scene key="inventoryList" component={InventoryList} hideNavBar />
         <Scene key="newList" component={NewList} hideNavBar />
-        <Scene key="addInventory" component={AddInventory} hideNavBar />
+        <Scene key="addInventory"  component={AddInventory} hideNavBar />
+        <Scene key="signup" component={Signup} hideNavBar />
 
          </Stack>
       </Router>

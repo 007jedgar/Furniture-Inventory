@@ -10,32 +10,51 @@ import {
 import {
     Block,
     NavBar,
-    AddBtn
+    AddBtn,
+    EmptyCard
 } from '../components'
 import { Actions } from 'react-native-router-flux';
 
 
 class InventoryList extends Component {
+  constructor(props) {
+    super(props)
 
-    renderList() {
-        return (
-            <View>
-                <FlatList/>
-            </View>
-        )
+    this.state = {
+
     }
+  }
 
-    render() {
-        const { header } = styles
-        return (
-            <Block>
-                <NavBar />
-                <Text style={header}>Hello</Text>
+  onEdit = () => {
+    this.setState({ editing: true })
+  }
 
-                <AddBtn onPressed={() => Actions.newList()}/>
-            </Block>
-        )
-    }
+  renderList() {
+    return (
+      <View>
+        <FlatList
+          data={[]}
+          renderItem={({item}) => (
+              <Text>Item</Text>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+    )
+  }
+
+  render() {
+    const { header } = styles
+    return (
+      <Block>
+        <NavBar optionPress={this.onEdit} rightBtn="Edit"/>
+
+        <EmptyCard text="Add a List and start documenting your stuff."/>
+
+        <AddBtn onPressed={() => Actions.newList()}/>
+      </Block>
+    )
+  }
 }
 
 const styles = ScaledSheet.create({

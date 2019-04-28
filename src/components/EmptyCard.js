@@ -50,4 +50,4 @@ const styles = ScaledSheet.create({
   }
 })
 
-export { EmptyCard};
+export { EmptyCard };

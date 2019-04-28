@@ -143,6 +143,7 @@ const styles = ScaledSheet.create({
     position: 'absolute',
     alignSelf: 'flex-end',
     margin: '5@ms',
+    right: '10@ms',
   },
   bottomView: {
     marginBottom: '5@ms',
