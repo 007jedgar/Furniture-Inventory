@@ -163,7 +163,6 @@ const styles = ScaledSheet.create({
   pic: {
     width: '60@ms',
     height: '60@ms',
-    marginLeft: '5@ms',
     marginBottom: '5@ms',
     alignSelf: 'center',
   },

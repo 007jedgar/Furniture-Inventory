@@ -6,7 +6,7 @@ import {
   LayoutAnimation
 } from 'react-native'
 import {
-  ScaledSheet 
+  ScaledSheet, moderateScale 
 } from 'react-native-size-matters'
 import {
   Block
@@ -15,6 +15,7 @@ import {
   Actions
 } from 'react-native-router-flux'
 import firebase from 'react-native-firebase'
+import { CachedImage } from 'react-native-cached-image'
 
 class Welcome extends Component {
   constructor(props) {
@@ -43,7 +44,16 @@ class Welcome extends Component {
     const { header } = styles
     return (
       <Block style={{justifyContent: 'space-between'}}>
-        <Text style={header}>Catalogue Your Furniture</Text>
+        <Text style={header}>Catalog Your Furniture</Text>
+
+        <CachedImage 
+          source={require('../assets/icons/couch.png')} 
+          style={{
+            width: moderateScale(100),
+            height: moderateScale(100),
+            alignSelf: 'center',
+          }} 
+        />
 
         <View>
           <TouchableOpacity onPress={() => Actions.signup()} style={styles.btn}>
@@ -65,7 +75,9 @@ const styles = ScaledSheet.create({
     marginBottom: '30@ms',
     marginLeft: '5@ms',
     fontSize: '25@ms',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'RobotoSlab-Bold',
+    color: '#5E5999'
   },
   btn: {
     margin: '5@ms',
@@ -74,12 +86,12 @@ const styles = ScaledSheet.create({
     padding: '4@ms',
     paddingTop: '8@ms',
     paddingBottom: '8@ms',
-    borderRadius: '5@ms',
+    borderRadius: '3@ms',
   },
   btnText: {
     alignSelf: 'center',
     fontSize: '27@ms',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'RobotoSlab-Regular',
     color: '#fff'
   },
   formView: {

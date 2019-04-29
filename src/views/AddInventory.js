@@ -52,7 +52,7 @@ class AddInventory extends Component {
          // or const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           listImg: source,
-        });
+        })
       }
     })
   }
@@ -78,10 +78,12 @@ class AddInventory extends Component {
 
         {this.renderTotalItems()}
 
-        <InventoryCard />
+        <InventoryCard 
+
+        />
 
         <TouchableOpacity style={btn}>
-          <Text style={[btnText, {color: '#6761A8'}]}>Add Another Item</Text>
+          <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={btn}>
@@ -98,7 +100,7 @@ const styles = ScaledSheet.create({
     height: '60@ms',
   },
   btnText: {
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-Regular',
     fontSize: '25@ms',
     textAlign: 'center',
   },

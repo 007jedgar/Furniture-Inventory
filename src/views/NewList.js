@@ -10,12 +10,16 @@ import {
 import {
     Block, BackNavBar
 } from '../components'
-import {formStyle} from '../stylesheets';
+import { formStyle } from '../stylesheets';
 import {
   KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scroll-view'
-import {CachedImage} from 'react-native-cached-image'
+import { CachedImage } from 'react-native-cached-image'
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import {
+  newList
+} from '../actions'
 var ImagePicker = require("react-native-image-picker");
 
 var t = require('tcomb-form-native');
@@ -52,6 +56,10 @@ class NewList extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log(this.props.currentList)
+  }
+
   onGetImg = () => {
     ImagePicker.showImagePicker((response) => {
       console.log('Response = ', response);
@@ -67,7 +75,8 @@ class NewList extends Component {
          // or const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           listImg: source,
-        });
+          listData: response.uri
+        })
       }
     })
   }
@@ -77,7 +86,12 @@ class NewList extends Component {
   }
 
   onNext = () => {
-    Actions.addInventory({ })
+    const { listData } = this.state
+    const { name, description } = this.state.value
+    let listInfo = { listImg: listData, name, description, createdBy: this.props.uuid }
+    console.log(listInfo)
+    this.props.newList(listInfo)
+    Actions.addInventory()
   }
 
   render() {
@@ -132,7 +146,7 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
   },
   nextbtn: {
-    backgroundColor: '#6761A8',
+    backgroundColor: '#5533A1',
     position: 'absolute',
     bottom: 0,
     width: '100%',
@@ -147,4 +161,14 @@ const styles = ScaledSheet.create({
   },
 })
 
-export default NewList
+const mapStateToProps = state => {
+  const { currentList } = state.inventory
+  const { uuid } = state.auth
+
+  return {
+    currentList,
+    uuid,
+  }
+}
+
+export default connect(mapStateToProps, {newList})(NewList)

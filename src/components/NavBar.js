@@ -36,6 +36,23 @@ class NavBar extends Component {
     }
   }
 
+  renderSettings() {
+    if (this.props.settings) {
+      return (
+        <TouchableOpacity onPress={() => this.props.settingsPressed()}>
+          <CachedImage 
+            source={require('../assets/icons/settings.png')} 
+            style={{
+              width: moderateScale(30),
+              height: moderateScale(30),
+              marginLeft: moderateScale(5)
+            }} 
+          />
+        </TouchableOpacity>
+      )
+    }
+  }
+
   renderBottomRow() {
     const { secondRow } = this.props;
     if (this.props.bottomRow) {
@@ -86,6 +103,7 @@ class NavBar extends Component {
         <View style={top}>
 
           {this.renderBackBtn()}
+          {this.renderSettings()}
 
           <View style={titleView}>
             <Text style={titleStyle}>{title}</Text>
@@ -107,7 +125,7 @@ class NavBar extends Component {
 
 const styles = ScaledSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF3F7',
     shadowOffset: {width: 3, height: 3},
     shadowColor: '#393939',
     shadowOpacity: .3,

@@ -51,6 +51,7 @@ const styles = ScaledSheet.create({
     borderRadius: '4@ms',
     borderColor: '#989898',
     justifyContent: 'center',
+    paddingLeft: '4@ms',
   },
 });
 

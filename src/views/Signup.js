@@ -62,7 +62,7 @@ class Welcome extends Component {
       signup: {},
       showLogin: false,
       showSignup: true,
-      formState: 'Signup'
+      formState: 'Sign up'
     }
   }
 
@@ -146,7 +146,7 @@ class Welcome extends Component {
   }
 
   toggleSignup = () => {
-    let formState = !this.state.showSignup? 'Signup': 'Login'
+    let formState = !this.state.showSignup? 'Sign up': 'Login'
     this.setState({ 
       showSignup: !this.state.showSignup,
       showLogin: !this.state.showLogin,
@@ -199,12 +199,12 @@ const styles = ScaledSheet.create({
     padding: '4@ms',
     paddingTop: '8@ms',
     paddingBottom: '8@ms',
-    borderRadius: '5@ms',
+    borderRadius: '3@ms',
   },
   btnText: {
     alignSelf: 'center',
     fontSize: '27@ms',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'RobotoSlab-Regular',
     color: '#fff'
   },
   formView: {

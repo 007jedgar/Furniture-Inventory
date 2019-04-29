@@ -8,9 +8,10 @@ import {
     SIGNUP_USER_SUCCESS,
     SIGNUP_USER,
     LOGOUT_USER_SUCCESS,
-    GET_USER
+    GET_USER,
+    GET_UID,
 } from './types'
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 const uuidv1 = require('uuid/v1');
 
 export const getUser = () => {
@@ -22,8 +23,9 @@ export const getUser = () => {
                 const value = await AsyncStorage.getItem('uuid')
                 if(value !== null) {
                     // value previously stored
+                    return dispatch({ type: GET_UID, payload: value })
                 } else {
-                    saveTempId()
+                    return saveTempId()
                 }
             } catch(e) {
                 dispatch({ type: LOGIN_USER_FAILED })
@@ -45,8 +47,10 @@ const saveTempId = () => {
             try {
                 let uuid = uuidv1()
                 await AsyncStorage.setItem('uuid', uuid)
+            
                 let user = { id: uuid }
                 dispatch({ type: LOGIN_USER_SUCCESS, payload: user })
+                dispatch({ type: GET_UID, payload: uuid })
             } catch (e) {
                 dispatch({ type: LOGIN_USER_FAILED })
             }

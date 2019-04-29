@@ -48,15 +48,15 @@ const styles = ScaledSheet.create({
     fontSize: '23@ms',
   },
   title: {
-    fontSize: '20@ms',
-    fontFamily: 'Roboto-Regular'
+    fontSize: '17@ms',
+    fontFamily: 'RobotoSlab-Regular'
   },
   container: {
     marginLeft: '10@ms',
     marginRight: '10@ms',
     marginBottom: '30@ms',
     borderBottomWidth: '4@ms',
-    borderColor: '#989898',
+    borderColor: '#5E5999',
     justifyContent: 'center',
   },
 });

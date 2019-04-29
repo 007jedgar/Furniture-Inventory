@@ -89,7 +89,7 @@ class BackNavBar extends Component {
 const styles = ScaledSheet.create({
   container: {
     height: '60@vs',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF3F7',
     shadowOffset: {width: 3, height: 3},
     shadowColor: '#393939',
     shadowOpacity: .3,

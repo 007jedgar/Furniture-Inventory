@@ -29,8 +29,8 @@ const styles = ScaledSheet.create({
     paddingBottom: '40@vs',
   },
   uhOhText: {
-    color: 'dimgrey',
-    fontFamily: 'Roboto-Regular',
+    color: '#5E5999',
+    fontFamily: 'Raleway-Regular',
     fontSize: '24@ms',
     margin: '20@ms',
     textAlign: 'center',

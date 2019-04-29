@@ -14,6 +14,10 @@ import {
     EmptyCard
 } from '../components'
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux'
+import {
+  getInventoryLists
+} from '../actions'
 
 
 class InventoryList extends Component {
@@ -25,15 +29,26 @@ class InventoryList extends Component {
     }
   }
 
+  componentDidMount() {
+    // this.props.uuid
+    this.props.getInventoryLists(1221)
+  }
+
   onEdit = () => {
     this.setState({ editing: true })
   }
 
   renderList() {
+    if (!this.props.inventoryLists) {
+      return (
+        <EmptyCard text="Add a List and start documenting your stuff."/>
+      )
+    }
+
     return (
       <View>
         <FlatList
-          data={[]}
+          data={this.props.inventoryLists}
           renderItem={({item}) => (
               <Text>Item</Text>
           )}
@@ -47,9 +62,14 @@ class InventoryList extends Component {
     const { header } = styles
     return (
       <Block>
-        <NavBar optionPress={this.onEdit} rightBtn="Edit"/>
+        <NavBar 
+          settings 
+          optionPress={this.onEdit} 
+          rightBtn="Edit"
+          settingsPressed={() => Actions.settings()}
+        />
 
-        <EmptyCard text="Add a List and start documenting your stuff."/>
+        {this.renderList()}
 
         <AddBtn onPressed={() => Actions.newList()}/>
       </Block>
@@ -80,4 +100,14 @@ const styles = ScaledSheet.create({
     },
 })
 
-export default InventoryList
+const mapStateToProps = state => {
+  const { inventoryLists } = state.inventory
+  const { uuid } = state.auth
+
+  return {
+    inventoryLists,
+    uuid
+  }
+}
+
+export default connect(mapStateToProps, {getInventoryLists})(InventoryList)
