@@ -38,15 +38,7 @@ class BackNavBar extends Component {
     }
   }
 
-  renderNetworkStatus() {
-    if (!this.state.isConnected) {
-      return (
-        <View style={styles.networkAlert}>
-          <Text style={styles.networkText}>No Internet Connection!</Text>
-        </View>
-      )
-    }
-  }
+
 
   renderSettings() {
     if (this.props.settings) {
@@ -102,7 +94,6 @@ class BackNavBar extends Component {
 
         </View>
 
-        {this.renderNetworkStatus()}
       </View>
     )
   }

@@ -17,7 +17,7 @@ const InventoryListCard = (props) => {
   const { img, nameStyle, descriptionStyle, cardContainer, infoContainer } = styles
 
   return (
-    <TouchableOpacity onPress={() => props.onSelect()}>
+    <TouchableOpacity onPress={() => props.onSelect(props.inventory)}>
 
       <View style={cardContainer}>
         <View>

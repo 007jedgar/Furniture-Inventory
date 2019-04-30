@@ -18,24 +18,6 @@ class NavBar extends Component {
     }
   }
 
-  componentDidMount() {
-    this.checkConnection()
-  }
-
-  checkConnection = () => {
-    try {
-      fetch('https://www.google.com/').then((resp) => {
-          probablyHasInternet = resp.status === 200 || resp.status === 503;
-          this.setState({ isConnected: true })
-        }).catch((e) => {
-          probablyHasInternet = false;
-          this.setState({ isConnected: probablyHasInternet })
-        })
-    } catch(err) {
-      this.setState({ isConnected: false })
-    }
-  }
-
   renderSettings() {
     if (this.props.settings) {
       return (
@@ -79,16 +61,6 @@ class NavBar extends Component {
     }
   }
 
-  renderNetworkStatus() {
-    if (!this.state.isConnected) {
-      return (
-        <View style={styles.networkAlert}>
-          <Text style={styles.networkText}>No Internet Connection!</Text>
-        </View>
-      )
-    }
-  }
-
   render() {
     const {
        titleStyle, titleView,
@@ -115,7 +87,6 @@ class NavBar extends Component {
 
         </View>
 
-        {this.renderNetworkStatus()}
         {this.renderBottomRow()}
 
       </View>

@@ -29,8 +29,9 @@ export const newList = (listInfo) => {
       docRef = doc
       let listId = doc.id
       listInfo.id = doc.id
-      listInfo.docRef = doc.ref
+      listInfo.docRef = doc
       dispatch({ type: NEW_LIST, payload: listInfo })
+      Actions.replace('addInventory',{ list: listInfo })
 
       if (imgData) {
         return getImgURL(listId, imgData, listInfo.createdBy)
@@ -42,8 +43,7 @@ export const newList = (listInfo) => {
       return docRef.update({
         listImgURL: url
       })
-    }).then(() => console.log('done')).catch((err) => {
-      console.log(err)
+    }).catch((err) => {
       dispatch({ type: NEW_LIST_FAILED })
     })
   }
@@ -91,47 +91,52 @@ export const getInventoryLists = (uid) => {
       let lists = []
       snap.forEach((doc) => {
         let info = doc.data()
-        info.ref = doc.ref
+        info.docRef = doc.ref
         info.id = doc.id
 
         lists.push(info)
       })
-      console.log(lists)
       dispatch({ type: GET_LISTS, payload: lists })
     })
   }
 }
 
-export const newItem = (itemInfo, listInfo) => {
-  console.log(itemInfo, listInfo)
+export const newItem = (itemInfo, listInfo, finish) => {
+  if (!itemInfo) {
+    return Actions.itemsList({ list: listInfo })
+  }
   return (dispatch) => {
     let uri = itemInfo.imgUri
     let title = itemInfo.name
     let docRef = {}
     itemInfo.imgUri = ""
 
-    firebase.firestore().collection('lists')
+    return firebase.firestore().collection('lists')
     .doc(listInfo.id).collection('items')
     .add(itemInfo).then((doc) => {
-      console.log(doc)
       docRef = doc
       let uid = doc.id
+      if (finish) {
+        Actions.replace('itemsList', {list: listInfo })
+      }
+      
 
       if (uri) {
         return getImgURL(uid, uri, title)
+      } else {
+        return null
       }
-      
     }).then((url) => {
       if (!url) {
         return;
       }
-      console.log(docRef)
       return docRef.update({
         imgURL: url
       })
-    }).then(() => dispatch({ type: NEW_ITEM }))
+    }).then(() => {
+      dispatch({ type: NEW_ITEM })
+    })
     .catch((err) => {
-      console.log(err)
       dispatch({ type: NEW_ITEM_FAILED })
     })
   }
@@ -147,7 +152,7 @@ export const getItems = (listRef) => {
       let items = []
       querySnap.forEach((doc) => {
         let item = doc.data()
-        item.ref = doc.ref
+        item.docRef = doc.ref
         item.id = doc.id
 
         items.push(item)
@@ -160,17 +165,18 @@ export const getItems = (listRef) => {
   }
 }
 
-export const deleteItem = (ref) => {
+export const deleteItem = (docRef) => {
   return (dispatch) => {
-    ref.delete().catch(err => {
+    docRef.delete().catch(err => {
       // Actions.popTo('inventoryList')
     }) 
   }
 }
 
 
-export const deleteItemList = (docRef) => {
+export const deleteItemList = (docRef, uid) => {
   return (dispatch) => {
+    //delete ref provided then get updated list
     docRef.delete().then(() => {
       return firebase.firestore().collection('lists')
       .where('createdBy', '==', uid).get().then((snap) => {
@@ -181,18 +187,16 @@ export const deleteItemList = (docRef) => {
         let lists = []
         snap.forEach((doc) => {
           let info = doc.data()
-          info.ref = doc.ref
+          info.docRef = doc.ref
           info.id = doc.id
   
           lists.push(info)
         })
-        console.log(lists)
         dispatch({ type: GET_LISTS, payload: lists })
       })
     }).then(() => {
       Actions.popTo('inventoryList')
     }).catch(err => {
-      console.log(err)
     }) 
   }
 }
@@ -200,12 +204,12 @@ export const deleteItemList = (docRef) => {
 export const setCurrentList = (listInfo) => {
   return (dispatch) => {
     dispatch({ type: NEW_LIST, payload: listInfo })
+    Actions.itemsList({ list: listInfo })
   }
 }
 
 export const updateInput = (i) => {
   return (dispatch) => {
-    console.log(i)
     let key = Object.keys(i)[0]
     s = { key, i}
     dispatch({ type: UPDATE_INPUT, payload: s })

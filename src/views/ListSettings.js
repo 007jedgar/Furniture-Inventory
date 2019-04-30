@@ -30,11 +30,10 @@ class ListSettings extends Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => this.props.deleteItemList(this.props.docRef)},
+        {text: 'OK', onPress: () => this.props.deleteItemList(this.props.docRef, this.props.uuid)},
       ],
       {cancelable: false},
     );
-    // this.props.deleteItemList()
   }
 
   render() {
@@ -72,10 +71,10 @@ const styles = ScaledSheet.create({
 })
 
 const mapStateToProps = state => {
-  const { } = state.inventory
+  const { uuid } = state.auth
 
   return {
-      
+      uuid
   }
 }
 

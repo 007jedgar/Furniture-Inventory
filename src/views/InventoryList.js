@@ -55,8 +55,7 @@ class InventoryList extends Component {
           renderItem={({item}) => (
             <InventoryListCard 
               inventory={item}
-              onSelect={() => {
-                Actions.itemsList({ list: item })
+              onSelect={(item) => {
                 this.props.setCurrentList(item)
               }}
             />

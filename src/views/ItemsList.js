@@ -35,7 +35,7 @@ class ItemsList extends Component {
   }
 
   componentDidMount() {
-    this.props.getItems(this.props.list.ref)
+    this.props.getItems(this.props.currentList.docRef)
   }
 
   toggleOptions = () => {
@@ -43,7 +43,7 @@ class ItemsList extends Component {
   }
 
   deleteItem = (item) => {
-    this.props.deleteItem(item.ref)
+    this.props.deleteItem(item.docRef)
   }
 
   renderItemsList() {
@@ -104,10 +104,11 @@ class ItemsList extends Component {
     return (
       <Block>
         <BackNavBar 
-          title="Furniture"
+          title={this.props.list.name}
+          titleText={{fontSize: moderateScale(23)}}
           titleViewStyle={{marginLeft: scale(10), marginBottom: moderateScale(5)}}
           settings
-          settingsPressed={() => Actions.listSettings({docRef: this.props.list.ref})}
+          settingsPressed={() => Actions.listSettings({docRef: this.props.list.docRef})}
         />
 
         {this.renderItemsList()}
@@ -145,7 +146,8 @@ const mapStateToProps = state => {
 
   return {
     uuid,
-    itemsInList
+    itemsInList,
+    currentList
   }
 }
 

@@ -34,6 +34,11 @@ class AddInventory extends Component {
 
   getInfo = () => {
     const { name, tags, imgUri, x, y, z } = this.props
+
+    if (!name) {
+      return alert('Please supply a name for the item')
+    }
+
     const itemInfo = {
       name: name.name, 
       tags: tags.tags, 
@@ -57,8 +62,9 @@ class AddInventory extends Component {
   onFinish = () => {
     const listInfo = this.props.currentList
     let info = this.getInfo()
-
-    this.props.newItem(info, listInfo)
+    let finish = true
+    
+    this.props.newItem(info, listInfo, finish)
     this.clearInput()
   }
 

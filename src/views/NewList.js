@@ -91,7 +91,6 @@ class NewList extends Component {
     let listInfo = { listImg: listData, name, description, createdBy: this.props.uuid }
     console.log(listInfo)
     this.props.newList(listInfo)
-    Actions.addInventory()
   }
 
   render() {
