@@ -14,6 +14,8 @@ import {
   BackNavBar,
   InventoryCard,
 } from '../components'
+import { connect } from 'react-redux';
+import { newItem, updateInput, clearInput } from '../actions';
 var ImagePicker = require("react-native-image-picker");
 
 class AddInventory extends Component {
@@ -22,8 +24,42 @@ class AddInventory extends Component {
 
       this.state = {
         listImg: require('../assets/icons/camera.png'),
-        itemNums: 0,
       }
+  } 
+
+  clearInput = () => {
+    this.refs.childCard.clearText()
+  }
+
+
+  getInfo = () => {
+    const { name, tags, imgUri, x, y, z } = this.props
+    const itemInfo = {
+      name: name.name, 
+      tags: tags.tags, 
+      imgUri: imgUri.imgUri, 
+      x: x.x, 
+      y: y.y, 
+      z: z.z,
+    }
+
+    return itemInfo
+  }
+
+  onAddAnother = () => {
+    const listInfo = this.props.currentList
+    let info = this.getInfo()
+
+    this.props.newItem(info, listInfo)
+    this.clearInput()
+  }
+
+  onFinish = () => {
+    const listInfo = this.props.currentList
+    let info = this.getInfo()
+
+    this.props.newItem(info, listInfo)
+    this.clearInput()
   }
 
   renderTotalItems() {
@@ -35,26 +71,6 @@ class AddInventory extends Component {
         </View>
       )
     }
-  }
-
-  onGetImg = () => {
-    ImagePicker.showImagePicker((response) => {
-      console.log('Response = ', response);
-    
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-         // or const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        this.setState({
-          listImg: source,
-        })
-      }
-    })
   }
 
   render() {
@@ -78,15 +94,32 @@ class AddInventory extends Component {
 
         {this.renderTotalItems()}
 
-        <InventoryCard 
-
+        <InventoryCard
+          ref="childCard"
+          {...this.props}
+          x={this.props.x} 
+          y={this.props.y} 
+          z={this.props.z}
+          imgUri={this.props.imgUri} 
+          name={this.props.name} 
+          tags={this.props.tags} 
+          xTyped={(x) => this.props.updateInput({x})}
+          yTyped={(y) => this.props.updateInput({y})}
+          zTyped={(z) => this.props.updateInput({z})}
+          nameTyped={(name) => this.props.updateInput({name})}
+          tagsTyped={(tags) => this.props.updateInput({tags})}
+          imgUri={(imgUri) => this.props.updateInput({imgUri})}
         />
 
-        <TouchableOpacity style={btn}>
+        {/* <TouchableOpacity onPress={this.clearInput} style={btn}>
+          <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity onPress={this.onAddAnother} style={btn}>
           <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={btn}>
+        <TouchableOpacity onPress={this.onFinish} style={btn}>
           <Text style={[btnText, {color: '#2A2D34'}]}>Finish List</Text>
         </TouchableOpacity>
 
@@ -117,4 +150,30 @@ const styles = ScaledSheet.create({
   }
 })
 
-export default AddInventory
+const mapStateToProps = state => {
+  const { 
+    currentList,
+    listImg,
+    itemNums,
+    name,
+    tags,
+    imgUri,
+    x,
+    y,
+    z,
+  } = state.inventory
+
+  return {
+    currentList,
+    listImg,
+    itemNums,
+    name,
+    tags,
+    imgUri,
+    x,
+    y,
+    z
+  }
+}
+
+export default connect(mapStateToProps, {newItem, updateInput, clearInput})(AddInventory)

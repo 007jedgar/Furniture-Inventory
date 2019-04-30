@@ -106,7 +106,7 @@ class NavBar extends Component {
           {this.renderSettings()}
 
           <View style={titleView}>
-            <Text style={titleStyle}>{title}</Text>
+            <Text style={[titleStyle, this.props.titleViewStyle]}>{title}</Text>
           </View>
 
           {<TouchableOpacity style={optionView} onPress={optionPress}>

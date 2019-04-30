@@ -14,8 +14,10 @@ import {
 import { AsyncStorage } from 'react-native';
 const uuidv1 = require('uuid/v1');
 
+console.disableYellowBox = true;
 export const getUser = () => {
     return async (dispatch) => {
+        console.ignoredYellowBox = ['Warning: Async Storage'];
         dispatch({ type: LOGIN_USER })
         const user = firebase.auth().currentUser
         if (!user) {
@@ -43,6 +45,7 @@ export const getUser = () => {
 
 const saveTempId = () => {
     return (dispatch) => {
+        console.ignoredYellowBox = ['Warning: Async Storage'];
         storeData = async () => {
             try {
                 let uuid = uuidv1()

@@ -21,11 +21,16 @@ class TextLine extends Component {
     this.props.typed(text);
   }
 
+  onClear = () => {
+    this._textInput.setNativeProps({text: ''})
+  }  
+
   render() {
     const { inputStyle } = this.props;
     return (
       <View style={styles.container}>
         <TextInput
+          ref={component => this._textInput = component}
           style={[styles.input, inputStyle]}
           onChangeText={(text) => this.sendData(text)}
           value={this.props.input}

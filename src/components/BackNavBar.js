@@ -48,6 +48,26 @@ class BackNavBar extends Component {
     }
   }
 
+  renderSettings() {
+    if (this.props.settings) {
+      return (
+        <TouchableOpacity onPress={() => this.props.settingsPressed()}>
+          <CachedImage 
+            source={require('../assets/icons/settings.png')} 
+            style={{
+              width: moderateScale(30),
+              height: moderateScale(30),
+              marginRight: moderateScale(5),
+              alignSelf: 'center',
+              marginTop: moderateScale(4),
+              marginRight: moderateScale(10),
+            }} 
+          />
+        </TouchableOpacity>
+      )
+    }
+  }
+
   render() {
     const {
       leftBtnView, titleStyle,  titleView,
@@ -77,6 +97,8 @@ class BackNavBar extends Component {
           <TouchableOpacity style={option} onPress={optionPress}>
             <Text style={optionText}>{rightBtn}</Text>
           </TouchableOpacity>
+
+          {this.renderSettings()}
 
         </View>
 

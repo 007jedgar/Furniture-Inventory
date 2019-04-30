@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text,
     TouchableOpacity,
-    ScrollView,
+    ActivityIndicator
 } from 'react-native'
 import {
     ScaledSheet,
@@ -17,7 +16,6 @@ import {
 import { DimensionLine } from './DimensionLine';
 import { TextLine } from './TextLine'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
@@ -44,18 +42,34 @@ var options = {
 };
 
 class InventoryCard extends Component {
-    constructor(props) {
-      super(props)
+  constructor(props) {
+    super(props)
 
-      this.state = {
-        listImg: require('../assets/icons/camera.png'),
-      }
+    this.state = {
+      listImg: require('../assets/icons/camera.png'),
+      itemNums: 0,
+      name: props.name,
+      tags: props.tags,
+      imgUri: props.imgUri,
+      x: props.x,
+      y: props.y,
+      z: props.z,
+      picLoading: false,
+    }
+  }
+
+  clearText = () => {
+    this.refs.xchildInput.onClear()
+    this.refs.ychildInput.onClear()
+    this.refs.zchildInput.onClear()
+    this.refs.namechildInput.onClear()
+    this.refs.tagschildInput.onClear()
+    this.setState({ listImg: require('../assets/icons/camera.png') })
   }
 
   onGetImg = () => {
-    ImagePicker.showImagePicker((response) => {
-      console.log('Response = ', response);
-    
+    this.setState({ picLoading: true })
+    ImagePicker.showImagePicker((response) => {    
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -67,8 +81,11 @@ class InventoryCard extends Component {
         // or const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           listImg: source,
+          picLoading: false
         })
+        this.props.imgUri(response.uri)
       }
+      this.setState({ picLoading: false })
     })
   }
 
@@ -78,20 +95,28 @@ class InventoryCard extends Component {
       <View>
         <View style={dimensionConatiner}>
           <DimensionLine 
+            ref="xchildInput"
+            {...this.props}
             value={this.state.x}
-            typed={(x) => this.setState({x})}
+            typed={(x) => this.props.xTyped(x)}
             placeholder=""
             title="X (width)"
+            returnKeyType="next"
           />
           <DimensionLine 
-            value={this.state.x}
-            typed={(x) => this.setState({x})}
+            ref="ychildInput"
+            {...this.props}
+            value={this.state.y}
+            typed={(y) => this.props.yTyped(y)}
             placeholder=""
             title="Y (height)"
+            returnKeyType="next"
           />
           <DimensionLine 
-            value={this.state.x}
-            typed={(x) => this.setState({x})}
+            ref="zchildInput"
+            {...this.props}
+            value={this.state.z}
+            typed={(z) => this.props.zTyped(z)}
             placeholder=""
             title="Z (depth)"
           />
@@ -109,6 +134,14 @@ class InventoryCard extends Component {
             style={styles.pic}
           />
         </TouchableOpacity>
+      )
+    }
+  }
+
+  renderLoading() {
+    if (this.state.picLoading) {
+      return(
+        <ActivityIndicator size="large" color="#0000ff" />
       )
     }
   }
@@ -133,20 +166,27 @@ class InventoryCard extends Component {
               <TouchableOpacity onPress={this.onGetImg}>
                 <CachedImage source={this.state.listImg} style={[pic, addedStyle]} />
               </TouchableOpacity>
+              {this.renderLoading()}
             </View>
 
             <View>
               <View style={styles.titleContainer}>
-                <TextLine 
+                <TextLine
+                  ref="namechildInput"
+                  {...this.props} 
                   placeholder="Item Name"
-                  typed={(x) => this.setState({name: x})}  
+                  typed={(name) => this.props.nameTyped(name)}
+                  value={this.state.name}  
                 />
               </View>
               
               <View style={styles.titleContainer}> 
                 <TextLine 
+                  ref="tagschildInput"
+                  {...this.props}
                   placeholder={`Tags: "Dresser, storage"`}
-                  typed={(x) => this.setState({name: x})}
+                  typed={(tags) => this.props.tagsTyped(tags)}
+                  value={this.state.value}
                 />
               </View>
             </View>

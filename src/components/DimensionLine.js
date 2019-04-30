@@ -7,6 +7,7 @@ import {
 import {
   ScaledSheet,
 } from 'react-native-size-matters';
+import { thisExpression } from '@babel/types';
 
 class DimensionLine extends Component {
   constructor(props) {
@@ -22,18 +23,24 @@ class DimensionLine extends Component {
     this.props.typed(text);
   }
 
+  onClear = () => {
+    this._textInput.setNativeProps({text: ''})
+  }
+
   render() {
     const { inputStyle, placeholder, input, keyboardType, title } = this.props;
     return (
     <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
         <TextInput
+          ref={component => this._textInput = component}
           style={[styles.input, inputStyle]}
           onChangeText={(text) => this.sendData(text)}
           value={input}
           placeholder={placeholder}
           autoCapitalize="sentences"
-          keyboardType="numeric"
+          keyboardType="numbers-and-punctuation"
+          returnKeyType={this.props.returnKeyType}
         />
       </View>
     );

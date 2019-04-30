@@ -21,3 +21,7 @@ export const NEW_ITEM = 'new_item'
 export const NEW_ITEM_FAILED = 'mew_item_failed'
 
 export const GET_LISTS = 'get_lists'
+export const GET_ITEMS = 'get_items';
+
+export const UPDATE_INPUT = 'update_input'
+export const CLEAR_INPUT = 'clear_input'
