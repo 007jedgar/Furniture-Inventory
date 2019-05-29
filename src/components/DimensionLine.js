@@ -27,6 +27,10 @@ class DimensionLine extends Component {
     this._textInput.setNativeProps({text: ''})
   }
 
+  onSet = (text) => {
+    this._textInput.setNativeProps({ text })
+  }
+
   render() {
     const { inputStyle, placeholder, input, keyboardType, title } = this.props;
     return (

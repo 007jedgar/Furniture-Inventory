@@ -12,52 +12,43 @@ import {
     GET_UID,
 } from './types'
 import { AsyncStorage } from 'react-native';
+import {getInventoryLists} from './InventoryActions'
 const uuidv1 = require('uuid/v1');
 
 console.disableYellowBox = true;
+console.ignoredYellowBox = ['Warning: Async Storage'];
+
+
 export const getUser = () => {
     return async (dispatch) => {
-        console.ignoredYellowBox = ['Warning: Async Storage'];
         dispatch({ type: LOGIN_USER })
-        const user = firebase.auth().currentUser
-        if (!user) {
-            try {
-                const value = await AsyncStorage.getItem('uuid')
-                if(value !== null) {
-                    // value previously stored
-                    return dispatch({ type: GET_UID, payload: value })
-                } else {
-                    return saveTempId()
-                }
-            } catch(e) {
-                dispatch({ type: LOGIN_USER_FAILED })
+        try {
+            const value = await AsyncStorage.getItem('uuid')
+            if(value !== null) {
+                // value previously stored
+                console.log(value)
+                getInventoryLists(value, dispatch)
+                return dispatch({ type: GET_UID, payload: value })
+            } else {
+                return saveTempId(dispatch)
             }
+        } catch(e) {
+            dispatch({ type: LOGIN_USER_FAILED })
         }
-
-        firebase.firestore().collection('users')
-        .doc(user.uid).get().then((doc) => {
-            let info = doc.data()
-
-            dispatch({ type: GET_USER, payload: info })
-        })
     }
 }
 
-const saveTempId = () => {
-    return (dispatch) => {
-        console.ignoredYellowBox = ['Warning: Async Storage'];
-        storeData = async () => {
-            try {
-                let uuid = uuidv1()
-                await AsyncStorage.setItem('uuid', uuid)
-            
-                let user = { id: uuid }
-                dispatch({ type: LOGIN_USER_SUCCESS, payload: user })
-                dispatch({ type: GET_UID, payload: uuid })
-            } catch (e) {
-                dispatch({ type: LOGIN_USER_FAILED })
-            }
-          }
+const saveTempId = async (dispatch) => {
+    try {
+        let uuid = uuidv1()
+        await AsyncStorage.setItem('uuid', uuid)
+    
+        let user = { uuid }
+        dispatch({ type: LOGIN_USER_SUCCESS, payload: user })
+        dispatch({ type: GET_UID, payload: uuid })
+        getInventoryLists(uuid, dispatch)
+    } catch (e) {
+        dispatch({ type: LOGIN_USER_FAILED })
     }
 }
 

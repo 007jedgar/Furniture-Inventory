@@ -15,7 +15,8 @@ import {
 import { connect } from 'react-redux'
 import {
   getItems,
-  deleteItem
+  deleteItem,
+  setItem,
 } from '../actions'
 import { 
   moderateScale,
@@ -46,6 +47,10 @@ class ItemsList extends Component {
     this.props.deleteItem(item.docRef)
   }
 
+  setItem = (_item) => {
+    this.props.setItem(_item)
+  }
+
   renderItemsList() {
     const { list } = this.props
     if (this.props.itemsInList.length < 1) {
@@ -65,6 +70,7 @@ class ItemsList extends Component {
               {...this.props}
               item={item}
               deleteItem={this.deleteItem}
+              setItem={this.setItem}
             />
           )}
           numColumns={2}
@@ -151,4 +157,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {getItems, deleteItem})(ItemsList)
+export default connect(mapStateToProps, {getItems, deleteItem, setItem})(ItemsList)

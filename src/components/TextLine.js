@@ -23,7 +23,11 @@ class TextLine extends Component {
 
   onClear = () => {
     this._textInput.setNativeProps({text: ''})
-  }  
+  }
+  
+  onSet = (text) => {
+    this._textInput.setNativeProps({ text })
+  }
 
   render() {
     const { inputStyle } = this.props;

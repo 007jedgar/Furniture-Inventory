@@ -4,13 +4,11 @@ import {
   View,
   Text,
 } from 'react-native'
-import { CachedImage } from 'react-native-cached-image'
 import {
   ScaledSheet,
 } from 'react-native-size-matters'
-import {
-  Actions
-} from 'react-native-router-flux'
+import FastImage from 'react-native-fast-image'
+
 
 const InventoryListCard = (props) => {
   const { name, listImgURL, description } = props.inventory
@@ -21,7 +19,7 @@ const InventoryListCard = (props) => {
 
       <View style={cardContainer}>
         <View>
-          <CachedImage style={img} source={{uri: listImgURL }}/>
+          <FastImage style={img} source={{uri: listImgURL }}/>
         </View>
 
         <View style={infoContainer}>
@@ -41,13 +39,14 @@ const styles = ScaledSheet.create({
   },
   nameStyle: {
     fontSize: '24@ms',
-    fontFamily: 'Roboto-Regular',
-    color: '#2A2D34',
+    fontFamily: 'Roboto-Medium',
+    color: '#5E5999',
   },
   descriptionStyle: {
-    fontSize: '22@ms',
-    fontFamily: 'Roboto-Regular',
+    fontSize: '20@ms',
+    fontFamily: 'Raleway-Regular',
     color: '#2A2D34',
+    marginBottom: '4@ms',
   },
   cardContainer: {
     flexDirection: 'row',

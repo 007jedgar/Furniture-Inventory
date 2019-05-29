@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native run-ios --simulator=\"iPhone 8\"",
+    "start": "react-native run-ios --simulator=\"iPhone 8 Plus\"",
     "test": "jest",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'"
   },
@@ -19,6 +19,8 @@
     "react": "16.8.3",
     "react-native": "0.59.5",
     "react-native-cached-image": "github:fungilation/react-native-cached-image",
+    "react-native-communications": "2.2.1",
+    "react-native-fast-image": "^5.4.2",
     "react-native-firebase": "^5.3.1",
     "react-native-image-picker": "^0.28.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",

@@ -6,12 +6,13 @@ import {
   GET_LISTS,
   GET_ITEMS,
   UPDATE_INPUT,
-  CLEAR_INPUT
+  CLEAR_INPUT,
+  SET_ITEM,
 } from '../actions/types'
 
 const INITIAL_STATE = {
   currentList: {
-    id: '8XrdQ2SKUEB5GjVReiCW',
+    id: '',
   },
   inventoryLists: [],
   itemsInList: [],
@@ -20,6 +21,8 @@ const INITIAL_STATE = {
   name: '',
   tags: '',
   imgUri: '',
+  itemImg: '',
+  docRef: {},
   x: '',
   y: '',
   z: '',
@@ -46,13 +49,25 @@ export default (state = INITIAL_STATE, action) => {
         ...state, 
         listImg: require('../assets/icons/camera.png'),
         itemNums: 0,
-        name: ' ',
-        tags: ' ',
-        imgUri: ' ',
-        x: ' ',
-        y: ' ',
-        z: ' ',
+        name: '',
+        tags: '',
+        imgUri: '',
+        x: '',
+        y: '',
+        z: '',
       } 
+    case SET_ITEM: 
+      return { 
+        ...state, 
+        itemImg: action.payload.imgUri,
+        name: action.payload.name,
+        tags: action.payload.tags,
+        imgUri: action.payload.imgUri,
+        x: action.payload.x,
+        y: action.payload.y,
+        z: action.payload.z,
+        docRef: action.payload.docRef
+      }
     default:
       return state;
   }

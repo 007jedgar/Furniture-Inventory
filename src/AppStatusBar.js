@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {
-  ScaledSheet,
+  ScaledSheet, moderateScale,
 } from 'react-native-size-matters';
 
 const AppStatusBar = ({backgroundColor, ...props}) => (
@@ -18,13 +18,13 @@ const AppStatusBar = ({backgroundColor, ...props}) => (
 // const { width, height } = Dimensions.get('window');
 
 let STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
-
+let STATUSBAR_MARGIN = moderateScale(5)
 const isIos = Platform.OS === 'ios';
-const isIphoneX = isIos && Dimensions.get('window').height === 812;
+const isIphoneX = isIos && Dimensions.get('window').height >= 810;
 // const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 
 if (isIos && isIphoneX) {
-  STATUSBAR_HEIGHT = 44;
+  STATUSBAR_HEIGHT = moderateScale(40);
 } else if (isIos) {
   STATUSBAR_HEIGHT = 20;
 } else {

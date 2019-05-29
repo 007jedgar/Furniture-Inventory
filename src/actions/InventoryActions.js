@@ -6,7 +6,10 @@ import {
   GET_LISTS,
   GET_ITEMS,
   UPDATE_INPUT,
-  CLEAR_INPUT
+  CLEAR_INPUT,
+  SET_ITEM,
+  EDIT_ITEM,
+  EDIT_ITEM_FAILED,
 } from './types'
 import firebase from 'react-native-firebase'
 import {
@@ -80,10 +83,9 @@ const getImgURL = (uid, uri, title, mime = 'application/octet-stream') => {
   })
 }
 
-export const getInventoryLists = (uid) => {
-  return (dispatch) => {
+export const getInventoryLists = (uid, dispatch) => {
     firebase.firestore().collection('lists')
-    .where('createdBy', '==', uid).get().then((snap) => {
+    .where('createdBy', '==', uid).onSnapshot((snap) => {
       if (snap.empty) {
         return 
       }
@@ -98,7 +100,6 @@ export const getInventoryLists = (uid) => {
       })
       dispatch({ type: GET_LISTS, payload: lists })
     })
-  }
 }
 
 export const newItem = (itemInfo, listInfo, finish) => {
@@ -173,6 +174,29 @@ export const deleteItem = (docRef) => {
   }
 }
 
+export const editItem = (docRef, item) => {
+  return (dispatch) => {
+    let uri = item.imgUri
+    let uid = docRef.id
+    let title = item.name
+    item.imgUri = ""
+
+    docRef.update(item).then(() => {
+      dispatch({ type: EDIT_ITEM })
+      Actions.pop()
+
+      return getImgURL(uid, uri, title)
+    }).then((url) => {
+      if (!url) {
+        return
+      }
+
+      docRef.update({ imgURL: url})
+    }).catch(() => {
+      dispatch({ type: EDIT_ITEM_FAILED })
+    })
+  }
+}
 
 export const deleteItemList = (docRef, uid) => {
   return (dispatch) => {
@@ -205,6 +229,14 @@ export const setCurrentList = (listInfo) => {
   return (dispatch) => {
     dispatch({ type: NEW_LIST, payload: listInfo })
     Actions.itemsList({ list: listInfo })
+  }
+}
+
+export const setItem = (item) => {
+  return (dispatch) => {
+    console.log(item)
+    dispatch({ type: SET_ITEM, payload: item })
+    Actions.addInventory({ edits: true })
   }
 }
 

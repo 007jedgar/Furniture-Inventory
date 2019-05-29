@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
@@ -14,10 +13,8 @@ export default class App extends Component {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk, logger))
     return (
       <Provider store={store}>
-        <View style={{flex: 1}}>
-          <AppStatusBar backgroundColor="#243238" barStyle="light-content"/>
-          <Router />
-        </View>
+        <AppStatusBar backgroundColor="#243238" barStyle="light-content"/>
+        <Router />          
       </Provider>
     )
   }

@@ -25,3 +25,8 @@ export const GET_ITEMS = 'get_items';
 
 export const UPDATE_INPUT = 'update_input'
 export const CLEAR_INPUT = 'clear_input'
+
+export const SET_ITEM = 'set_item'
+
+export const EDIT_ITEM = 'edit_item'
+export const EDIT_ITEM_FAILED = 'edit_items_failed'

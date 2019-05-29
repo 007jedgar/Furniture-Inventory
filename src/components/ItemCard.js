@@ -4,12 +4,12 @@ import {
   TouchableOpacity,
   View,
   Text,
-  Image,
+  ActivityIndicator
 } from 'react-native'
 import {
   ScaledSheet,
 } from 'react-native-size-matters'
-import { CachedImage } from 'react-native-cached-image'
+import FastImage from 'react-native-fast-image'
 
 class ItemCard extends Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class ItemCard extends Component {
       deleting: false,
       info: true,
       finished: false,
+      loading: true
     }
   }
 
@@ -38,6 +39,15 @@ class ItemCard extends Component {
     this.props.deleteItem(this.props.item)
   }
 
+  itemPressed = () => {
+    const { name, tags, imgURL, x, y ,z, docRef } = this.props.item
+    let _item = {
+      name, tags, imgUri: imgURL, x, y ,z, docRef
+    }
+
+    this.props.setItem(_item)
+  }
+
   renderDelete() {
     if (this.state.deleting) {
       return (
@@ -50,7 +60,7 @@ class ItemCard extends Component {
 
   renderInfo() {
     const { nameStyle, dimensionsStyle } = styles
-    const { imgURL, name, tags, x, y, z } = this.props.item
+    const { name, x, y, z } = this.props.item
     let dimensions = x && y && z? `${x}x${y}x${z}`:'';
     if (!x && !y) {
       dimensions = ''
@@ -68,6 +78,17 @@ class ItemCard extends Component {
     }
   }
 
+  renderLoading() {
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator 
+          size="large"
+          color="#fff"
+        />
+      )
+    }
+  }
+
   renderImg() {
     const { img } = styles
     const { imgURL } = this.props.item
@@ -75,22 +96,27 @@ class ItemCard extends Component {
     if (this.state.finished) {
       return (
         <View style={{flexDirection: 'row', flex: 1, backgroundColor: '#fff'}}>
-          <CachedImage source={pic} style={img}/>
+          <FastImage 
+            source={pic} 
+            style={img}
+            onProgress={() => this.setState({ loading: true })}
+            onLoadEnd={() => this.setState({ loading: false })}
+          />
+          
         </View>
       )
     }
   }
 
   render() {
-    const { cardContainer, img } = styles
-    const { imgURL } = this.props.item
-    const pic =  imgURL? {uri: imgURL} : require('../assets/icons/couch.png')
+    const { cardContainer } = styles
 
     return (
-      <TouchableWithoutFeedback style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={this.itemPressed} style={{flex: 1}}>
         <View style={cardContainer}> 
 
           {this.renderImg()}
+          {this.renderLoading()}
           {this.renderInfo()}
           {this.renderDelete()}
         </View>   

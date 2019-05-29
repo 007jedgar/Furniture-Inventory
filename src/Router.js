@@ -12,6 +12,7 @@ import ListSettings from './views/ListSettings'
 
 import {
   ScaledSheet,
+  moderateScale
 } from 'react-native-size-matters'
 
 class RouterComponent extends Component {
@@ -31,7 +32,13 @@ class RouterComponent extends Component {
     }
 
     return (
-      <Router>
+      <Router sceneStyle={{ backgroundColor: 'red', marginTop: moderateScale(0)}}
+      getSceneStyle={() => ({
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      })}
+      >
         <Stack key="root" hideNavBar initial>
 
           <Scene key="welcome"  component={Welcome} hideNavBar />

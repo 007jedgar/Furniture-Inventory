@@ -9,18 +9,18 @@ import {
 
 
 const Block = (props) => {
-    return (
-        <View style={[styles.container, props.style]}>
-            {props.children}
-        </View>
-    )
+  return (
+    <View style={[styles.container, props.style]}>
+      {props.children}
+    </View>
+  )
 }
 
 const styles = ScaledSheet.create({
   container : {
     flex: 1,
-    width: Dimensions.get('window').width,
-    backgroundColor: '#FFF3F7'
+    backgroundColor: '#FFF3F7',
+    paddingBottom: '10@ms',
   }
 })
 

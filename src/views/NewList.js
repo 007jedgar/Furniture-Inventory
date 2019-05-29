@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native'
 import {
     ScaledSheet, moderateScale, scale
@@ -14,13 +15,12 @@ import { formStyle } from '../stylesheets';
 import {
   KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scroll-view'
-import { CachedImage } from 'react-native-cached-image'
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {
   newList
 } from '../actions'
 var ImagePicker = require("react-native-image-picker");
+import FastImage from 'react-native-fast-image'
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
@@ -61,6 +61,8 @@ class NewList extends Component {
   }
 
   onGetImg = () => {
+    this.setState({ picLoading: true })
+
     ImagePicker.showImagePicker((response) => {
       console.log('Response = ', response);
     
@@ -75,9 +77,11 @@ class NewList extends Component {
          // or const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
           listImg: source,
-          listData: response.uri
+          listData: response.uri,
+          picLoading: false,
         })
       }
+      this.setState({ picLoading: false })
     })
   }
 
@@ -92,6 +96,15 @@ class NewList extends Component {
     console.log(listInfo)
     this.props.newList(listInfo)
   }
+
+  renderLoading() {
+    if (this.state.picLoading) {
+      return(
+        <ActivityIndicator size="large" color="#0000ff" />
+      )
+    }
+  }
+
 
   render() {
     const { formView, pic, nextbtn, nextBtnText } = styles
@@ -113,7 +126,8 @@ class NewList extends Component {
 
         <KeyboardAwareScrollView  style={formView}>
           <TouchableOpacity onPress={this.onGetImg} style={{marginBottom: moderateScale(20)}}>
-            <CachedImage source={this.state.listImg} style={[pic, addedStyle]} />
+            <FastImage source={this.state.listImg} style={[pic, addedStyle]} />
+            {this.renderLoading()}
             <Text style={{textAlign: 'center'}}>Inventory List Photo (Optional)</Text>
           </TouchableOpacity>
           

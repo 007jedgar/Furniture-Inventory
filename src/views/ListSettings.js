@@ -56,6 +56,7 @@ const styles = ScaledSheet.create({
     btn: {
     margin: '5@ms',
     marginTop: '0@ms',
+    marginBottom: '10@ms',
     backgroundColor: '#F35F55',
     padding: '4@ms',
     paddingTop: '8@ms',

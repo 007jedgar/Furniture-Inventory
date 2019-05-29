@@ -15,8 +15,13 @@ import {
   InventoryCard,
 } from '../components'
 import { connect } from 'react-redux';
-import { newItem, updateInput, clearInput } from '../actions';
-var ImagePicker = require("react-native-image-picker");
+import { Actions } from 'react-native-router-flux'
+import { 
+  newItem, 
+  updateInput, 
+  clearInput,
+  editItem 
+} from '../actions';
 
 class AddInventory extends Component {
   constructor(props) {
@@ -38,14 +43,15 @@ class AddInventory extends Component {
     if (!name) {
       return alert('Please supply a name for the item')
     }
+    let itemInfo = {}
 
-    const itemInfo = {
-      name: name.name, 
-      tags: tags.tags, 
-      imgUri: imgUri.imgUri, 
-      x: x.x, 
-      y: y.y, 
-      z: z.z,
+    itemInfo = {
+      name: name.name? name.name: name, 
+      tags: tags.tags? tags.tags: tags, 
+      imgUri: imgUri.imgUri? imgUri.imgUri: imgUri, 
+      x: x.x? x.x: x, 
+      y: y.y? y.y: y, 
+      z: z.z? z.z: z,
     }
 
     return itemInfo
@@ -62,10 +68,19 @@ class AddInventory extends Component {
   onFinish = () => {
     const listInfo = this.props.currentList
     let info = this.getInfo()
+    console.log(info)
     let finish = true
     
     this.props.newItem(info, listInfo, finish)
     this.clearInput()
+  }
+
+  onEdit = () => {
+    let { docRef } = this.props
+    let item = this.getInfo()
+    let finish = true 
+
+    this.props.editItem(docRef, item, finish)
   }
 
   renderTotalItems() {
@@ -79,23 +94,57 @@ class AddInventory extends Component {
     }
   }
 
-  render() {
+  renderEdits() {
     const { btn, btnText } = styles
+    if (this.props.edits) {
+      return (
+        <TouchableOpacity onPress={this.onEdit} style={btn}>
+          <Text style={[btnText, {color: '#5E5999'}]}>Edit Item</Text>
+        </TouchableOpacity>
+      )
+    }
+  }
+
+  renderNewList() {
+    const { btn, btnText } = styles
+    if (!this.props.edits) {
+      return (
+        <View>
+          <TouchableOpacity onPress={this.onAddAnother} style={btn}>
+            <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={this.onFinish} style={btn}>
+            <Text style={[btnText, {color: '#2A2D34'}]}>Finish List</Text>
+          </TouchableOpacity>          
+        </View>
+      )
+    }
+  }
+
+  render() {
     let addedStyle =  { borderWidth: moderateScale(2), 
       borderColor: '#6761A8', 
       marginBottom: moderateScale(5),
       padding: moderateScale(2),
       alignSelf: 'center',
      }
+    let title = ''
     if (this.state.listImg == require('../assets/icons/camera.png')) {
       addedStyle = {}
+    }
+    if (this.props.edits) {
+      title = 'Edit item'
+    } else {
+      title = 'Add Item'
     }
 
     return (
       <Block >
         <BackNavBar 
-          title="Add Item" 
+          title={title} 
           titleViewStyle={{marginLeft: scale(-60), marginBottom: moderateScale(5)}}
+          drawerPress={() => Actions.popTo('inventoryList')}
         />
 
         {this.renderTotalItems()}
@@ -114,20 +163,11 @@ class AddInventory extends Component {
           zTyped={(z) => this.props.updateInput({z})}
           nameTyped={(name) => this.props.updateInput({name})}
           tagsTyped={(tags) => this.props.updateInput({tags})}
-          imgUri={(imgUri) => this.props.updateInput({imgUri})}
+          setUri={(imgUri) => this.props.updateInput({imgUri})}
         />
 
-        {/* <TouchableOpacity onPress={this.clearInput} style={btn}>
-          <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
-        </TouchableOpacity> */}
-
-        <TouchableOpacity onPress={this.onAddAnother} style={btn}>
-          <Text style={[btnText, {color: '#5E5999'}]}>Add Another Item</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={this.onFinish} style={btn}>
-          <Text style={[btnText, {color: '#2A2D34'}]}>Finish List</Text>
-        </TouchableOpacity>
+        {this.renderEdits()}
+        {this.renderNewList()}
 
       </Block>
     )
@@ -164,6 +204,7 @@ const mapStateToProps = state => {
     name,
     tags,
     imgUri,
+    docRef,
     x,
     y,
     z,
@@ -173,6 +214,7 @@ const mapStateToProps = state => {
     currentList,
     listImg,
     itemNums,
+    docRef,
     name,
     tags,
     imgUri,
@@ -182,4 +224,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {newItem, updateInput, clearInput})(AddInventory)
+export default connect(mapStateToProps, {newItem, updateInput, clearInput, editItem})(AddInventory)

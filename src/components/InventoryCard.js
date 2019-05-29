@@ -8,7 +8,6 @@ import {
     ScaledSheet,
     moderateScale
 } from 'react-native-size-matters'
-import { CachedImage } from 'react-native-cached-image'
 var ImagePicker = require("react-native-image-picker");
 import {
   splitForm
@@ -16,6 +15,7 @@ import {
 import { DimensionLine } from './DimensionLine';
 import { TextLine } from './TextLine'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import FastImage from 'react-native-fast-image'
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
@@ -58,6 +58,17 @@ class InventoryCard extends Component {
     }
   }
 
+  componentDidMount() {
+    this.refs.xchildInput.onSet(this.props.x)
+    this.refs.ychildInput.onSet(this.props.y)
+    this.refs.zchildInput.onSet(this.props.z)
+    this.refs.namechildInput.onSet(this.props.name)
+    this.refs.tagschildInput.onSet(this.props.tags)
+    if (this.props.imgUri) {
+      this.setState({ listImg: {uri: this.props.imgUri} })
+    }
+  }
+
   clearText = () => {
     this.refs.xchildInput.onClear()
     this.refs.ychildInput.onClear()
@@ -83,7 +94,7 @@ class InventoryCard extends Component {
           listImg: source,
           picLoading: false
         })
-        this.props.imgUri(response.uri)
+        this.props.setUri(response.uri)
       }
       this.setState({ picLoading: false })
     })
@@ -97,7 +108,7 @@ class InventoryCard extends Component {
           <DimensionLine 
             ref="xchildInput"
             {...this.props}
-            value={this.state.x}
+            value={this.props.x}
             typed={(x) => this.props.xTyped(x)}
             placeholder=""
             title="X (width)"
@@ -106,7 +117,7 @@ class InventoryCard extends Component {
           <DimensionLine 
             ref="ychildInput"
             {...this.props}
-            value={this.state.y}
+            value={this.props.y}
             typed={(y) => this.props.yTyped(y)}
             placeholder=""
             title="Y (height)"
@@ -115,7 +126,7 @@ class InventoryCard extends Component {
           <DimensionLine 
             ref="zchildInput"
             {...this.props}
-            value={this.state.z}
+            value={this.props.z}
             typed={(z) => this.props.zTyped(z)}
             placeholder=""
             title="Z (depth)"
@@ -129,7 +140,7 @@ class InventoryCard extends Component {
     if (this.props.isEditing) {
       return (
         <TouchableOpacity>
-          <CachedImage 
+          <FastImage 
             source={require('../assets/icons/delete.png')}
             style={styles.pic}
           />
@@ -164,7 +175,7 @@ class InventoryCard extends Component {
 
             <View style={{alignSelf: 'center'}}>
               <TouchableOpacity onPress={this.onGetImg}>
-                <CachedImage source={this.state.listImg} style={[pic, addedStyle]} />
+                <FastImage source={this.state.listImg} style={[pic, addedStyle]} />
               </TouchableOpacity>
               {this.renderLoading()}
             </View>

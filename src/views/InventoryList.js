@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
   View,
-  Text,
   FlatList
 } from 'react-native'
 import {
@@ -20,7 +19,8 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux'
 import {
   getInventoryLists,
-  setCurrentList
+  setCurrentList,
+  getUser
 } from '../actions'
 
 class InventoryList extends Component {
@@ -33,7 +33,8 @@ class InventoryList extends Component {
   }
 
   componentDidMount() {
-    this.props.getInventoryLists(this.props.uuid)
+    this.props.getUser()
+    // this.props.getInventoryLists(this.props.uuid)
   }
 
   onEdit = () => {
@@ -118,4 +119,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {getInventoryLists, setCurrentList})(InventoryList)
+export default connect(mapStateToProps, {getInventoryLists, setCurrentList, getUser})(InventoryList)

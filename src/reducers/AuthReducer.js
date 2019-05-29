@@ -17,7 +17,7 @@ import {
 } from '../actions/types'
 
 const INITIAL_STATE = {
-  uuid: 'joneaux_123',
+  uuid: '',
   currentUser: {},
   userData: {},
   userLoading: false,
